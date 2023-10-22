@@ -36,7 +36,7 @@ mono_crash.*
 
 # Visual Studio cache directory
 .vs/
-*.idea/
+.idea/
 .vscode/
 
 # Visual Studio 2017 auto generated files
