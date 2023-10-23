@@ -12,8 +12,15 @@ public class VillaAPIController: ControllerBase
     //Задаем endPoint
     
     [HttpGet]
-    public IEnumerable<VillaDTO> GetVillas()
+    public ActionResult<IEnumerable<VillaDTO>> GetVillas()
     {
-        return VillaStore.villaList;
+        return Ok(VillaStore.villaList);
     }
+    
+    [HttpGet("{id:int}")]
+    public ActionResult<VillaDTO> GetVilla(int id)
+    {//С помощью ActionResult определяем тип возвращаемого значения
+        return Ok(VillaStore.villaList.FirstOrDefault(u=>u.Id==id));
+    }
+    
 }
