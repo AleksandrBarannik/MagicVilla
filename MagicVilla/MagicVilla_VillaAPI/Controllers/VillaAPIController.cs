@@ -20,7 +20,17 @@ public class VillaAPIController: ControllerBase
     [HttpGet("{id:int}")]
     public ActionResult<VillaDTO> GetVilla(int id)
     {//С помощью ActionResult определяем тип возвращаемого значения
-        return Ok(VillaStore.villaList.FirstOrDefault(u=>u.Id==id));
+        if (id == 0)
+        {
+            return BadRequest();
+        }
+        var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
+        
+        if (villa == null)
+        {
+            return NotFound();
+        }
+        return Ok(villa);
     }
     
 }
