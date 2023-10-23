@@ -43,6 +43,11 @@ public class VillaApiController: ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError )]
     public ActionResult<VillaDTO>CreateVilla([FromBody]VillaDTO? villaDto)
     {
+        if (VillaStore.villaList.FirstOrDefault(u => u.Name.ToLower() == villaDto.Name.ToLower()) != null)
+        {
+            ModelState.AddModelError("CustomError","Villa already Exsist");
+            return BadRequest(ModelState);
+        }
         if (villaDto == null)
         {
             return BadRequest();
