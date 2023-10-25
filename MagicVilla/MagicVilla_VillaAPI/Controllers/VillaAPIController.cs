@@ -87,5 +87,26 @@ public class VillaApiController: ControllerBase
         VillaStore.villaList.Remove(villa);
         return NoContent();
     }
+
+    [HttpPut("{id:int}", Name = "UpdateVilla")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     
+    public IActionResult UpdateVilla(int id, [FromBody] VillaDTO villaDto)
+    {
+        if (villaDto == null || id != villaDto.Id)
+        {
+            return BadRequest();
+        }
+
+        var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
+        villa.Name = villaDto.Name;
+        villa.Sqft = villaDto.Sqft;
+        villa.Occupancy = villaDto.Occupancy;
+        villa.Price = villaDto.Price;
+        return NoContent();
+
+    }
+
+
 }
