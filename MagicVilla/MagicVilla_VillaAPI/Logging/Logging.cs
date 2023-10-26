@@ -6,11 +6,22 @@ public class Logging:Ilogging
     {
         if (type == "error")
         {
+            Console.BackgroundColor = ConsoleColor.Red;
             Console.WriteLine("ERROR - "+ message);
+            Console.BackgroundColor = ConsoleColor.Black;
         }
         else
         {
-            Console.WriteLine(message);
+            if (type == "warning")
+            {
+                Console.BackgroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("WARNING - "+ message);
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
+            else
+            {
+                Console.WriteLine(message);
+            }
         }
     }
 }
