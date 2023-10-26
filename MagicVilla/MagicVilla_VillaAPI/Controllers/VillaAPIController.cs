@@ -112,7 +112,7 @@ public class VillaApiController: ControllerBase
         villa.Name = villaDto.Name;
         villa.Sqft = villaDto.Sqft;
         villa.Occupancy = villaDto.Occupancy;
-        villa.Price = villaDto.Price;
+        villa.Rate = villaDto.Rate;
         return NoContent();
 
     }
