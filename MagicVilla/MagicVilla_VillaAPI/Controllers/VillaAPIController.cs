@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MagicVilla_VillaAPI.Controllers;
 
-//Устанавливаем маршрут
+//Устанавливаем маршрут 
 [Route("api/VillaAPI")]
 [ApiController]
 public class VillaApiController: ControllerBase
