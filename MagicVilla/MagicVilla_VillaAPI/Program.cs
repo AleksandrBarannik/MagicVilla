@@ -1,29 +1,33 @@
+/*
+ 
+ //Установить через терминал dotnet tool install --global dotnet-ef
+Add NuGet:
+        Microsoft.AspNetCore.Mvc.NewtonsoftJson;
+        Microsoft.AspNetCore.JsonPatch;
+        Microsoft.EntityFraemworkCore.SqlServer
+        Microsoft.EntityFraemworkCore.Tools        
+        
+*/
+
+using MagicVilla_VillaAPI.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-/*
-Add NuGet:
-        Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-        Microsoft.AspNetCore.JsonPatch;
-        
-*/
 
-/*
- //Для использования SereLog вместо стандартного
- //Установить пакеты SereLog.AspNet;Serelog.Sinks.File;
-Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
-    .WriteTo.File("log/villaLogs.txt",rollingInterval: RollingInterval.Day).CreateLogger();
-builder.Host.UseSerilog();
-*/
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
+{
+    //DefaultSQLConnection прописываем  appsettings.json
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+});
 
 builder.Services.AddControllers(option =>
 {
-    //Будете выдавать ошибку если тип формата не Json /Xml;
     //option.ReturnHttpNotAcceptable = true;
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
