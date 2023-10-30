@@ -8,7 +8,6 @@ Add NuGet:
         Microsoft.EntityFraemworkCore.Tools        
         
 */
-
 using MagicVilla_VillaAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
