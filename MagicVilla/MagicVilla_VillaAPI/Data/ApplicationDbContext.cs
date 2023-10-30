@@ -13,6 +13,7 @@ public class ApplicationDbContext:DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Add Data in Villa table
         modelBuilder.Entity<Villa>().HasData
         (
             new Villa()
