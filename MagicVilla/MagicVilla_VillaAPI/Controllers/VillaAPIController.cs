@@ -4,6 +4,7 @@ using MagicVilla_VillaAPI.Models.Dto;
 using MagicVillaVillaAPI.Migrations;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaAPI.Controllers;
 
@@ -12,25 +13,21 @@ namespace MagicVilla_VillaAPI.Controllers;
 [ApiController]
 public class VillaApiController: ControllerBase
 {
-    private readonly ILogger _logger;
     private readonly ApplicationDbContext _db;
-    public VillaApiController(ILogger logger,ApplicationDbContext db)
+    public VillaApiController(ApplicationDbContext db)
     {
-        _logger = logger;
         _db = db;
     }
     
-    //Set endPoint
     
-    [HttpGet]
+    [HttpGet] 
     [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult<IEnumerable<VillaDTO>> GetVillas()
     {
-        _logger.LogInformation("Getting all villas");
         return Ok(_db.Villas.ToList());
     }
     
-    [HttpGet("{id:int}",Name = "GetVilla")]
+    [HttpGet("{id:int}",Name = "GetVilla")] 
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound )]
@@ -38,7 +35,6 @@ public class VillaApiController: ControllerBase
     {//С помощью ActionResult определяем тип возвращаемого значения
         if (id == 0)
         {
-            _logger.LogError("Get Villa Error with Id= " + id);
             return BadRequest();
         }
         var villa = _db.Villas.FirstOrDefault(u => u.Id == id);
@@ -50,7 +46,7 @@ public class VillaApiController: ControllerBase
         return Ok(villa);
     }
 
-    [HttpPost]
+    [HttpPost] 
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError )]
@@ -63,7 +59,7 @@ public class VillaApiController: ControllerBase
         }
         if (villaDto == null)
         {
-            return BadRequest();
+            return BadRequest(villaDto);
         }
 
         if (villaDto.Id > 0)
@@ -71,7 +67,7 @@ public class VillaApiController: ControllerBase
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
         //Convert types VillaDto to Villa
-        Villa model = new Villa()
+        Villa model = new ()
         {
             Id = villaDto.Id,
             Name = villaDto.Name,
@@ -79,7 +75,8 @@ public class VillaApiController: ControllerBase
             Rate = villaDto.Rate,
             Occupancy = villaDto.Occupancy,
             Sqft = villaDto.Sqft,
-            ImageUrl = villaDto.ImageUrl
+            ImageUrl = villaDto.ImageUrl,
+            Amenity = villaDto.Amenity
         };
         
         _db.Villas.Add(model);
@@ -132,7 +129,8 @@ public class VillaApiController: ControllerBase
             Rate = villaDto.Rate,
             Occupancy = villaDto.Occupancy,
             Sqft = villaDto.Sqft,
-            ImageUrl = villaDto.ImageUrl
+            ImageUrl = villaDto.ImageUrl,
+            Amenity = villaDto.Amenity
         };
         _db.Villas.Update(model);
         _db.SaveChanges();
@@ -149,7 +147,7 @@ public class VillaApiController: ControllerBase
         {
             return BadRequest();
         }
-        var villa = _db.Villas.FirstOrDefault(u => u.Id == id);
+        var villa = _db.Villas.AsNoTracking().FirstOrDefault(u => u.Id == id);
         
         //Convert types Villa to VillaDto
         VillaDTO villaDto = new ()
@@ -160,7 +158,8 @@ public class VillaApiController: ControllerBase
             Rate = villa.Rate,
             Occupancy = villa.Occupancy,
             Sqft = villa.Sqft,
-            ImageUrl = villa.ImageUrl
+            ImageUrl = villa.ImageUrl,
+            Amenity = villa.Amenity
         };
 
         if (villa == null)
@@ -179,7 +178,8 @@ public class VillaApiController: ControllerBase
             Rate = villaDto.Rate,
             Occupancy = villaDto.Occupancy,
             Sqft = villaDto.Sqft,
-            ImageUrl = villaDto.ImageUrl
+            ImageUrl = villaDto.ImageUrl,
+            Amenity = villaDto.Amenity
         };
         _db.Villas.Update(model);
         _db.SaveChanges();

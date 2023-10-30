@@ -1,6 +1,5 @@
 /*
  
- //Установить через терминал dotnet tool install --global dotnet-ef
 Add NuGet:
         Microsoft.AspNetCore.Mvc.NewtonsoftJson;
         Microsoft.AspNetCore.JsonPatch;
@@ -17,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-    //DefaultSQLConnection прописываем  appsettings.json
+    //DefaultSQLConnection write path in  appsettings.json
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
