@@ -35,10 +35,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 
                 //Service for Controller
-builder.Services.AddControllers(option =>
-{
-    
-}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+builder.Services.AddControllers().
+    AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 
 builder.Services.AddEndpointsApiExplorer();
