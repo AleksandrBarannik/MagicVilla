@@ -4,25 +4,35 @@ Add NuGet:
         Microsoft.AspNetCore.Mvc.NewtonsoftJson;
         Microsoft.AspNetCore.JsonPatch;
         Microsoft.EntityFraemworkCore.SqlServer
-        Microsoft.EntityFraemworkCore.Tools        
+        Microsoft.EntityFraemworkCore.Tools    
+        AutoMapper
+        AutoMapper.Extension,Microsoft.DependencyInjection
+            
         
 */
+
+using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container:
 
+                //Service for AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+                //Service for EntityFraemwork
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-    //DefaultSQLConnection write path in  appsettings.json
+    //DefaultSQLConnection write in  appsettings.json
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
+                //Service for Controller
 builder.Services.AddControllers(option =>
 {
-    //option.ReturnHttpNotAcceptable = true;
+    
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 
