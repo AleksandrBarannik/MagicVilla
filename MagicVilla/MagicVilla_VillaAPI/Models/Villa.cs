@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MagicVilla_VillaAPI.Models;
 
-//Data for Table in DataBase
+//Data Columns for Table in DataBase
 public class Villa
 {
    [Key][DatabaseGenerated(DatabaseGeneratedOption.Identity)]

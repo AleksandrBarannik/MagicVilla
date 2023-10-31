@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaAPI.Data;
-//Create Db
+//Create Db; value db;
 public class ApplicationDbContext:DbContext  
 {
     public DbSet<Villa> Villas { get; set; }
