@@ -13,11 +13,16 @@ Add NuGet:
 
 using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Repository;
+using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container:
+
+                //registration service Repository(pattern Repository)
+builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 
                 //Service for AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingConfig));
