@@ -1,5 +1,16 @@
 using MagicVilla_Web;
 
+/*
+ 
+Add NuGet:
+        AutoMapper
+        AutoMapper.Extension,Microsoft.DependencyInjection
+        In appsettings.json прописал URL адрес yfituj API:
+        "ServiceUrls": {"VillaAPI": "https://localhost:7001"}
+            
+        
+*/
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
