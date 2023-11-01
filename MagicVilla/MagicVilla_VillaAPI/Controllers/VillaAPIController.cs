@@ -6,7 +6,7 @@ using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-// Run  HTTP METHODS (GET;POST;PUT;DELETE;PATCH;)
+// Run  HTTP METHODS (GET;POST;PUT;DELETE;PATCH;) for Table Villas
 
 namespace MagicVilla_VillaAPI.Controllers;
 
@@ -155,7 +155,6 @@ public class VillaApiController: ControllerBase
     [HttpPut("{id:int}", Name = "UpdateVilla")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    
     public async Task<ActionResult<ApiResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDTO updateDto)
     {
         try
@@ -167,8 +166,8 @@ public class VillaApiController: ControllerBase
             }
 
             //Convert types VillaDto to Villa (using AutoMapper(use MapperConfig))
-            Villa model = _mapper.Map<Villa>(updateDto);
-            await _dbVilla.UpdateAsync(model);
+            Villa villa = _mapper.Map<Villa>(updateDto);
+            await _dbVilla.UpdateAsync(villa);
 
             _response.StatusCode = HttpStatusCode.NoContent;
             _response.IsSuccess = true;
@@ -185,7 +184,6 @@ public class VillaApiController: ControllerBase
     [HttpPatch("{id:int}", Name = "UpdateParticalVilla")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-
     public async Task<ActionResult<ApiResponse>> UpdateParticalVilla(int id, JsonPatchDocument<VillaUpdateDTO>? patchDto)
     {
         if (patchDto == null || id == 0)
