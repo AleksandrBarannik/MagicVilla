@@ -1,5 +1,5 @@
 ﻿namespace MagicVilla_Utility;
-//SD-Static details
+//SD-Static details(Type API Metods)
 public static class SD
 {
     public enum ApiType

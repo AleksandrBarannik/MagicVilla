@@ -1,11 +1,14 @@
 using MagicVilla_Web;
+using MagicVilla_Web.Services;
+using MagicVilla_Web.Services.IServices;
 
 /*
  
 Add NuGet:
         AutoMapper
         AutoMapper.Extension,Microsoft.DependencyInjection
-        In appsettings.json прописал URL адрес yfituj API:
+        JSON CONVERT
+        In appsettings.json прописал URL адрес VillaAPI:
         "ServiceUrls": {"VillaAPI": "https://localhost:7001"}
             
         
@@ -14,7 +17,13 @@ Add NuGet:
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+                //AutiMapper
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+                //VillaServices
+builder.Services.AddHttpClient<IVillaService, VillaService>();
+builder.Services.AddScoped<IVillaService, VillaService>();
+
 
 builder.Services.AddControllersWithViews();
 
