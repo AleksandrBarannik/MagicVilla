@@ -27,19 +27,46 @@ public class VillaController:Controller
         }
         return View(list);
     }
-
-    public IActionResult CreateVilla()
+    
+    public async Task<IActionResult> CreateVilla()
     {
-        throw new NotImplementedException();
+        return View();
     }
-
-    public IActionResult UpdateVilla()
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreateVilla(VillaCreateDTO model)
     {
-        throw new NotImplementedException();
-    }
+        if (ModelState.IsValid)
+        {
+            var response = await _villaService.CreateAsync<ApiResponse>(model);
+            if (response != null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(IndexVilla));
 
-    public IActionResult DeleteVilla()
-    {
-        throw new NotImplementedException();
+            } 
+        }
+        return View(model);
     }
+    
+    
+    
+    
+    
+    public async Task<IActionResult> UpdateVilla()
+    {
+        return View();
+    }
+    
+    public async Task<IActionResult> DeleteVilla()
+    {
+        return View();
+    }
+    
+
+    
+
+    
+
+    
 }

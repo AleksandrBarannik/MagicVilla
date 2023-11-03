@@ -184,7 +184,7 @@ public class VillaApiController: ControllerBase
     [HttpPatch("{id:int}", Name = "UpdateParticalVilla")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<ActionResult<ApiResponse>> UpdateParticalVilla(int id, JsonPatchDocument<VillaUpdateDTO>? patchDto)
+    public async Task<ActionResult<ApiResponse>> UpdateParticalVilla(int id, JsonPatchDocument<VillaUpdateDTO> patchDto)
     {
         if (patchDto == null || id == 0)
         {
