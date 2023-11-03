@@ -27,4 +27,19 @@ public class VillaController:Controller
         }
         return View(list);
     }
+
+    public IActionResult CreateVilla()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IActionResult UpdateVilla()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IActionResult DeleteVilla()
+    {
+        throw new NotImplementedException();
+    }
 }
