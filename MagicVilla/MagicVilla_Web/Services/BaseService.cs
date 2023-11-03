@@ -50,12 +50,13 @@ public class BaseService:IBaseService
                     break;
             }
 
-            HttpResponseMessage apiResponce = null;
+            HttpResponseMessage apiResponse = null;
             
-            apiResponce = await client.SendAsync(message);
-            var apiContent = await apiResponce.Content.ReadAsStringAsync();
-            var APIResponce = JsonConvert.DeserializeObject<T>(apiContent);
-            return APIResponce;
+            apiResponse = await client.SendAsync(message);
+            
+            var apiContent = await apiResponse.Content.ReadAsStringAsync();
+            var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
+            return APIResponse;
         }
         catch(Exception ex)
         {
@@ -65,8 +66,8 @@ public class BaseService:IBaseService
                 IsSuccess = false
             };
             var res = JsonConvert.SerializeObject(dto);
-            var APIResponce = JsonConvert.DeserializeObject<T>(res);
-            return APIResponce;
+            var APIResponse = JsonConvert.DeserializeObject<T>(res);
+            return APIResponse;
         }
     }
 }
