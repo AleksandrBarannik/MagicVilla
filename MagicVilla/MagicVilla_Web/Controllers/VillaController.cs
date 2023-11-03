@@ -30,7 +30,7 @@ public class VillaController:Controller
     
     public async Task<IActionResult> CreateVilla()
     {
-        return View();
+        return  View();
     }
     
     [HttpPost]
@@ -49,19 +49,61 @@ public class VillaController:Controller
         return View(model);
     }
     
-    
-    
-    
-    
-    public async Task<IActionResult> UpdateVilla()
+    public async Task<IActionResult> UpdateVilla(int villaId)
     {
-        return View();
+        var response = await _villaService.GetAsync<ApiResponse>(villaId);
+        if (response != null && response.IsSuccess)
+        {
+            VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
+            return View(_mapper.Map<VillaUpdateDTO>(model));
+        } 
+        return NotFound();
     }
     
-    public async Task<IActionResult> DeleteVilla()
+    [HttpPut]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateVilla(VillaUpdateDTO model)
     {
-        return View();
+        if (ModelState.IsValid)
+        {
+            var response = await _villaService.UpdateAsync<ApiResponse>(model);
+            if (response != null && response.IsSuccess)
+            {
+                return RedirectToAction(nameof(IndexVilla));
+
+            } 
+        }
+        return View(model);
     }
+    
+    public async Task<IActionResult> DeleteVilla(int villaId)
+    {
+        var response = await _villaService.GetAsync<ApiResponse>(villaId);
+
+        if (response != null && response.IsSuccess)
+        {
+            VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
+            return View(model);
+        }
+
+        return NotFound();
+    }
+
+    [HttpDelete]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteVilla(VillaDTO model)
+    {
+        var response = await _villaService.DeleteAsync<ApiResponse>(model.Id);
+        if (response != null && response.IsSuccess)
+        {
+            return RedirectToAction(nameof(IndexVilla));
+        }
+        return View(model);
+    }
+    
+    
+    
+    
     
 
     
