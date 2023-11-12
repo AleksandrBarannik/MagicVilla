@@ -98,15 +98,4 @@ public class VillaController:Controller
         }
         return View(model);
     }
-    
-    
-    
-    
-    
-
-    
-
-    
-
-    
 }

@@ -32,7 +32,7 @@ public class VillaNumberAPIController: ControllerBase
     {
         try
         {
-            IEnumerable<VillaNumber> villaList = await _dbVillaNumber.GetAllAsync();
+            IEnumerable<VillaNumber> villaList = await _dbVillaNumber.GetAllAsync(includeProperties:"Villa");
             _response.Result = _mapper.Map<List<VillaNumberDTO>>(villaList);
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
