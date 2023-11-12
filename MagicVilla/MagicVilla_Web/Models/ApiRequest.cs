@@ -2,7 +2,8 @@
 
 namespace MagicVilla_Web.Models;
 
-public class APIRequest
+//Request data from MagicVilla_VillaAPI( from server)
+public class ApiRequest
 {
     public ApiType ApiType { get; set; } = ApiType.GET;
     public string Url { get; set; }

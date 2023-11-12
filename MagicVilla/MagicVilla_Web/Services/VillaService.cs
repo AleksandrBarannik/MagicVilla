@@ -18,7 +18,7 @@ public class VillaService:BaseService, IVillaService
 
     public Task<T> GetAllAsync<T>()
     {
-        return SendAsync<T>(new APIRequest()
+        return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
             Url = villaUrl + "/api/villaAPI"
@@ -27,7 +27,7 @@ public class VillaService:BaseService, IVillaService
 
     public Task<T> GetAsync<T>(int id)
     {
-        return SendAsync<T>(new APIRequest()
+        return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
             Url = villaUrl + "/api/VillaAPI/"+id
@@ -36,7 +36,7 @@ public class VillaService:BaseService, IVillaService
 
     public Task<T> CreateAsync<T>(VillaCreateDTO dto)
     {
-        return SendAsync<T>(new APIRequest()
+        return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.POST,
             Data = dto,
@@ -46,17 +46,17 @@ public class VillaService:BaseService, IVillaService
 
     public Task<T> UpdateAsync<T>(VillaUpdateDTO dto)
     {
-        return SendAsync<T>(new APIRequest()
+        return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.PUT,
             Data = dto,
-            Url = villaUrl + "/api/VillaAPI"+ dto.Id
+            Url = villaUrl + "/api/VillaAPI/"+ dto.Id
         });
     }
 
     public Task<T> DeleteAsync<T>(int id)
     {
-        return SendAsync<T>(new APIRequest()
+        return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.DELETE,
             Url = villaUrl + "/api/VillaAPI/"+id

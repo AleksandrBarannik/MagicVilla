@@ -60,7 +60,7 @@ public class VillaController:Controller
         return NotFound();
     }
     
-    [HttpPut]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateVilla(VillaUpdateDTO model)
     {
@@ -70,7 +70,6 @@ public class VillaController:Controller
             if (response != null && response.IsSuccess)
             {
                 return RedirectToAction(nameof(IndexVilla));
-
             } 
         }
         return View(model);
@@ -85,11 +84,10 @@ public class VillaController:Controller
             VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
             return View(model);
         }
-
         return NotFound();
     }
 
-    [HttpDelete]
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteVilla(VillaDTO model)
     {
