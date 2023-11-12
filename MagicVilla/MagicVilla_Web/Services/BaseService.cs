@@ -4,7 +4,7 @@ using MagicVilla_Web.Models;
 using MagicVilla_Web.Services.IServices;
 using Newtonsoft.Json;
 
-
+// BaseService - base from all different service (Villa,VillaNumber etc)
 namespace MagicVilla_Web.Services;
 
 public class BaseService:IBaseService
@@ -18,7 +18,7 @@ public class BaseService:IBaseService
         this.httpClient = httpClient;
     }
      
-    public async Task<T> SendAsync<T>(APIRequest apiRequest)
+    public async Task<T> SendAsync<T>(ApiRequest apiRequest)
     {
         try
         {

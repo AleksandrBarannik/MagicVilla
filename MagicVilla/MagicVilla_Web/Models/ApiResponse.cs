@@ -2,6 +2,8 @@
 
 namespace MagicVilla_Web.Models;
 
+//DATA Response 
+
 public class ApiResponse
 {
     public HttpStatusCode StatusCode { get; set; }
