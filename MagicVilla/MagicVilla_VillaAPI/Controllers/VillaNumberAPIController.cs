@@ -89,13 +89,13 @@ public class VillaNumberAPIController: ControllerBase
         {
             if (await _dbVillaNumber.GetAsync(u => u.VillaNo == createDto.VillaNo) != null)
             {
-                ModelState.AddModelError("CustomError", "Villa already Exsist");
+                ModelState.AddModelError("ErrorMessages", "Villa already Exsist");
                 return BadRequest(ModelState);
             }
 
             if (await _dbVilla.GetAsync(u => u.Id == createDto.VillaID) == null)
             {
-                ModelState.AddModelError("CustomError", "Villa ID is Invalid");
+                ModelState.AddModelError("ErrorMessages", "Villa ID is Invalid");
                 return BadRequest(ModelState);
             }
             if (createDto == null)

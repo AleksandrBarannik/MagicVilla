@@ -27,7 +27,6 @@ public class VillaController:Controller
         }
         return View(list);
     }
-    
     public async Task<IActionResult> CreateVilla()
     {
         return  View();

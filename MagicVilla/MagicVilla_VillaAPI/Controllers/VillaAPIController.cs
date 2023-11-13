@@ -89,7 +89,7 @@ public class VillaApiController: ControllerBase
         {
             if (await _dbVilla.GetAsync(u => u.Name.ToLower() == createDto.Name.ToLower()) != null)
             {
-                ModelState.AddModelError("CustomError", "Villa already Exsist");
+                ModelState.AddModelError("ErrorMessages", "Villa already Exsist");
                 return BadRequest(ModelState);
             }
 

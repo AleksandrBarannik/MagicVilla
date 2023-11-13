@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using MagicVilla_Utility;
 using MagicVilla_Web.Models;
 using MagicVilla_Web.Services.IServices;
@@ -55,14 +56,40 @@ public class BaseService:IBaseService
             apiResponse = await client.SendAsync(message);
             
             var apiContent = await apiResponse.Content.ReadAsStringAsync();
+
+            try
+            {
+                //Для смены флага IsSucsess  и ошибки (что такой номер есть у другой виллы)
+                ApiResponse ApiResponse = JsonConvert.DeserializeObject<ApiResponse>(apiContent);
+
+                if (apiResponse.StatusCode == HttpStatusCode.BadRequest
+                    || apiResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    ApiResponse.StatusCode = HttpStatusCode.BadRequest;
+                    ApiResponse.IsSuccess = false;
+                    
+                    var res = JsonConvert.SerializeObject(ApiResponse);
+                    var returnObj = JsonConvert.DeserializeObject<T>(res);
+                    return returnObj;
+                }
+            }
+            
+            catch (Exception e)
+            {
+                // если вдруг ApiResponse другого типа ( не созданного нами)
+                var exceptionResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                return exceptionResponse;
+            }
+            
             var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
             return APIResponse;
         }
-        catch(Exception ex)
+        
+        catch(Exception e)
         {
             var dto = new ApiResponse()
             {
-                ErrorMessages = new List<string> { Convert.ToString(ex.Message) },
+                ErrorMessages = new List<string> { Convert.ToString(e.Message) },
                 IsSuccess = false
             };
             var res = JsonConvert.SerializeObject(dto);
