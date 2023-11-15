@@ -122,17 +122,6 @@ public class VillaNumberController:Controller
         }
     }
     
-    private async Task<IActionResult> CheckResponse <T>(ApiResponse response)
-    {
-        if (response != null && response.IsSuccess)
-        {
-            VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
-            return View(_mapper.Map<T>(model));
-        }
-        return NotFound();
-    }
-    
-    
     private async Task<IActionResult> RedirectIndexVillaNumber <T>(ApiResponse response, T model)
     {
         if (response != null && response.IsSuccess)
