@@ -5,6 +5,7 @@ namespace MagicVilla_VillaAPI.Data;
 //Create Db; value db;
 public class ApplicationDbContext:DbContext  
 {
+    public DbSet<LocalUser> LocalUsers { get; set; }
     public DbSet<Villa> Villas { get; set; }
     public DbSet<VillaNumber> VillaNumbers { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
