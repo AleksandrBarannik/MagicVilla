@@ -39,24 +39,16 @@ public class VillaController:Controller
         if (ModelState.IsValid)
         {
             var response = await _villaService.CreateAsync<ApiResponse>(model);
-            if (response != null && response.IsSuccess)
-            {
-                return RedirectToAction(nameof(IndexVilla));
-
-            } 
+            return await RedirectVillaIndex(response);
         }
+        TempData["error"] = "Error encountered";
         return View(model);
     }
     
     public async Task<IActionResult> UpdateVilla(int villaId)
     {
         var response = await _villaService.GetAsync<ApiResponse>(villaId);
-        if (response != null && response.IsSuccess)
-        {
-            VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
-            return View(_mapper.Map<VillaUpdateDTO>(model));
-        } 
-        return NotFound();
+        return await CheckResponse<VillaUpdateDTO>(response);
     }
     
     [HttpPost]
@@ -66,24 +58,16 @@ public class VillaController:Controller
         if (ModelState.IsValid)
         {
             var response = await _villaService.UpdateAsync<ApiResponse>(model);
-            if (response != null && response.IsSuccess)
-            {
-                return RedirectToAction(nameof(IndexVilla));
-            } 
+            return await RedirectVillaIndex(response);
         }
+        TempData["error"] = "Error encountered";
         return View(model);
     }
     
     public async Task<IActionResult> DeleteVilla(int villaId)
     {
         var response = await _villaService.GetAsync<ApiResponse>(villaId);
-
-        if (response != null && response.IsSuccess)
-        {
-            VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
-            return View(model);
-        }
-        return NotFound();
+        return await CheckResponse<VillaDTO>(response);
     }
 
     [HttpPost]
@@ -91,10 +75,26 @@ public class VillaController:Controller
     public async Task<IActionResult> DeleteVilla(VillaDTO model)
     {
         var response = await _villaService.DeleteAsync<ApiResponse>(model.Id);
+        return await RedirectVillaIndex(response);
+    }
+    
+    private async Task<IActionResult> CheckResponse <T>(ApiResponse response)
+    {
         if (response != null && response.IsSuccess)
         {
+            VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
+            return View(_mapper.Map<T>(model));
+        }
+        return NotFound();
+    }
+
+    private async Task<IActionResult> RedirectVillaIndex(ApiResponse response)
+    {
+        if (response != null && response.IsSuccess)
+        {
+            TempData["success"] = "Current Action with the villa was completed successfully";
             return RedirectToAction(nameof(IndexVilla));
         }
-        return View(model);
+        return View();
     }
 }

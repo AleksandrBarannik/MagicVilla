@@ -109,7 +109,7 @@ public class VillaNumberController:Controller
         if (response != null && response.IsSuccess)
         {
             VillaNumberDTO model = JsonConvert.DeserializeObject<VillaNumberDTO>(Convert.ToString(response.Result));
-            villaNumberVm.VillaNumber = _mapper.Map<VillaNumberDTO>(model);
+            villaNumberVm.VillaNumber = model;
         }
         await FillVillaList(villaNumberVm);
         return View(villaNumberVm);
