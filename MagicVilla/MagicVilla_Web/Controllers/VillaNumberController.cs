@@ -48,17 +48,7 @@ public class VillaNumberController:Controller
         if (ModelState.IsValid)
         {
             var response = await _villaNumberService.CreateAsync<ApiResponse>(model.VillaNumber);
-            if (response != null && response.IsSuccess)
-            {
-                return RedirectToAction(nameof(IndexVillaNumber));
-            }
-            else
-            {
-                if (response.ErrorMessages.Count > 0)
-                {
-                    ModelState.AddModelError("ErrorMessages",response.ErrorMessages.FirstOrDefault());
-                }
-            }
+            return await RedirectIndexVillaNumber(response, model);
         }
         //Update List Vills before uncorrect write Data (Номер Виллы уже существует in другой Вилле)
         await FillVillaList(model);
@@ -69,11 +59,13 @@ public class VillaNumberController:Controller
     {
         VillaNumberUpdateVM villaNumberVm = new();
         var response = await _villaNumberService.GetAsync<ApiResponse>(villaNo);
+        
         if (response != null && response.IsSuccess)
         {
             VillaNumberDTO model = JsonConvert.DeserializeObject<VillaNumberDTO>(Convert.ToString(response.Result));
             villaNumberVm.VillaNumber = _mapper.Map<VillaNumberUpdateDTO>(model);
         }
+        
         await FillVillaList(villaNumberVm);
         return View(villaNumberVm);
     }
@@ -86,17 +78,7 @@ public class VillaNumberController:Controller
         if (ModelState.IsValid)
         {
             var response = await _villaNumberService.UpdateAsync<ApiResponse>(model.VillaNumber);
-            if (response != null && response.IsSuccess)
-            {
-                return RedirectToAction(nameof(IndexVillaNumber));
-            }
-            else
-            {
-                if (response.ErrorMessages.Count > 0)
-                {
-                    ModelState.AddModelError("ErrorMessages",response.ErrorMessages.FirstOrDefault());
-                }
-            }
+            return await RedirectIndexVillaNumber(response, model);
         }
         await FillVillaList(model);
         return View(model);
@@ -106,11 +88,13 @@ public class VillaNumberController:Controller
     {
         VillaNumberDeleteVM villaNumberVm = new();
         var response = await _villaNumberService.GetAsync<ApiResponse>(villaNo);
+        
         if (response != null && response.IsSuccess)
         {
             VillaNumberDTO model = JsonConvert.DeserializeObject<VillaNumberDTO>(Convert.ToString(response.Result));
             villaNumberVm.VillaNumber = model;
         }
+        
         await FillVillaList(villaNumberVm);
         return View(villaNumberVm);
     }
@@ -120,15 +104,11 @@ public class VillaNumberController:Controller
     public async Task<IActionResult> DeleteVillaNumber(VillaNumberDeleteVM model)
     {
         var response = await _villaNumberService.DeleteAsync<ApiResponse>(model.VillaNumber.VillaNo);
-        if (response != null && response.IsSuccess)
-        {
-            return RedirectToAction(nameof(IndexVillaNumber));
-        }
-        return View(model);
+        return await RedirectIndexVillaNumber(response,model);
     }
 
     //Заполнение Выпадающего списка вилл (для создания Номеров Вилл)
-    public async Task FillVillaList(VillaNumberCreateVM villaNumberVm)
+    public async Task FillVillaList <T> (T villaNumberVm) where T: VillaNumberVM
     {
         var response = await _villaService.GetAllAsync<ApiResponse>();
         if (response != null && response.IsSuccess)
@@ -141,30 +121,32 @@ public class VillaNumberController:Controller
             });
         }
     }
-    public async Task FillVillaList(VillaNumberUpdateVM villaNumberVm)
+    
+    private async Task<IActionResult> CheckResponse <T>(ApiResponse response)
     {
-        var response = await _villaService.GetAllAsync<ApiResponse>();
         if (response != null && response.IsSuccess)
         {
-            villaNumberVm.VillaList = JsonConvert.DeserializeObject<List<VillaDTO>>
-                (Convert.ToString(response.Result)).Select(i=> new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
+            VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Result));
+            return View(_mapper.Map<T>(model));
         }
+        return NotFound();
     }
-    public async Task FillVillaList(VillaNumberDeleteVM villaNumberVm)
+    
+    
+    private async Task<IActionResult> RedirectIndexVillaNumber <T>(ApiResponse response, T model)
     {
-        var response = await _villaService.GetAllAsync<ApiResponse>();
         if (response != null && response.IsSuccess)
         {
-            villaNumberVm.VillaList = JsonConvert.DeserializeObject<List<VillaDTO>>
-                (Convert.ToString(response.Result)).Select(i=> new SelectListItem
-            {
-                Text = i.Name,
-                Value = i.Id.ToString()
-            });
+            TempData["success"] = "Current Action with the villa was completed successfully";
+            return RedirectToAction(nameof(IndexVillaNumber));
         }
+        else
+        {
+            if (response.ErrorMessages.Count > 0)
+            {
+                ModelState.AddModelError("ErrorMessages",response.ErrorMessages.FirstOrDefault());
+            }
+        }
+        return View(model);
     }
 }
