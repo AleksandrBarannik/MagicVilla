@@ -49,7 +49,11 @@ public class UserRepository:IUserRepository
                       && u.Password == loginRequestDto.Password);
         if (user == null)
         {
-            return null;
+            return new LoginResponseDTO()
+            {
+                Token = "",
+                User = null
+            };
         }
         //Generate JWT Token
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -65,8 +69,8 @@ public class UserRepository:IUserRepository
             Expires = DateTime.UtcNow.AddDays(7),
             SigningCredentials = new(new SymmetricSecurityKey(key),SecurityAlgorithms.HmacSha256Signature)
         };
-        
         var token = tokenHandler.CreateToken(tokenDescriptor);
+        
         LoginResponseDTO loginResponseDto = new LoginResponseDTO()
         {
             Token = tokenHandler.WriteToken(token),
