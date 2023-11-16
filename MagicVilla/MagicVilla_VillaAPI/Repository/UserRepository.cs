@@ -13,12 +13,10 @@ namespace MagicVilla_VillaAPI.Repository;
 public class UserRepository:IUserRepository
 {
     private readonly ApplicationDbContext _db;
-    private readonly IMapper _mapper;
     private string _secretKey;
-    public UserRepository(ApplicationDbContext db,IMapper mapper,IConfiguration configuration)
+    public UserRepository(ApplicationDbContext db,IConfiguration configuration)
     {
         _db = db;
-        _mapper = mapper;
         _secretKey = configuration.GetValue<string>("ApiSettings:Secret");
     }
 
@@ -34,8 +32,13 @@ public class UserRepository:IUserRepository
 
     public async Task<LocalUser> Register(RegistrationRequestDTO registrationRequestDto)
     {
-        LocalUser user = new();
-        _mapper.Map<LocalUser, RegistrationRequestDTO>(user);
+        LocalUser user = new()
+        {
+            UserName = registrationRequestDto.UserName,
+            Password = registrationRequestDto.Password,
+            Name = registrationRequestDto.Name,
+            Role = registrationRequestDto.Role
+        };
         await _db.LocalUsers.AddAsync(user);
         await _db.SaveChangesAsync();
         user.Password = "";

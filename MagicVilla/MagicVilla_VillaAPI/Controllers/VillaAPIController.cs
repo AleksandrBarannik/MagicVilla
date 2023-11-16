@@ -3,6 +3,7 @@ using AutoMapper;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,8 @@ public class VillaApiController: ControllerBase
         this._response = new();
     }
 
-    [HttpGet] 
+    [HttpGet]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async  Task<ActionResult<ApiResponse>> GetVillas()
     {
@@ -45,9 +47,12 @@ public class VillaApiController: ControllerBase
         return _response;
     }
     
-    [HttpGet("{id:int}",Name = "GetVilla")] 
+    [HttpGet("{id:int}",Name = "GetVilla")]
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound )]
     public async Task<ActionResult<ApiResponse>> GetVilla(int id)
     {//С помощью ActionResult определяем тип возвращаемого значения
@@ -80,8 +85,11 @@ public class VillaApiController: ControllerBase
     }
 
     [HttpPost] 
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError )]
     public async Task<ActionResult<ApiResponse>>CreateVilla([FromBody]VillaCreateDTO createDto)
     {
@@ -116,7 +124,10 @@ public class VillaApiController: ControllerBase
     }
 
     [HttpDelete("{id:int}", Name = "DeleteVilla")]
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ApiResponse>>DeleteVilla(int id)

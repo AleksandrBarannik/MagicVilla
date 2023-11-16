@@ -27,14 +27,10 @@ public class UserController:Controller
         if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
         {
             _message = "UserName or Password Incorrect";
-            _response.StatusCode = HttpStatusCode.BadRequest;
-            _response.IsSuccess = false;
-            _response.ErrorMessages.Add(_message);
+            _response.FillBadRequestDefault(_message);
             return BadRequest(_response);
         }
-        _response.Result = loginResponse;
-        _response.StatusCode = HttpStatusCode.OK;
-        _response.IsSuccess = true;
+        _response.FillGoodRequestDefault(loginResponse);
         return Ok(_response);
     }
     
@@ -45,22 +41,17 @@ public class UserController:Controller
         if (!userNameUnique)
         {
             _message = "UserName already Exsist";
-            _response.StatusCode = HttpStatusCode.BadRequest;
-            _response.IsSuccess = false;
-            _response.ErrorMessages.Add(_message);
+            _response.FillBadRequestDefault(_message);
             return BadRequest(_response);
         }
         var user = await _userRepository.Register(model);
         if (user == null)
         {
             _message = "Error While registering";
-            _response.StatusCode = HttpStatusCode.BadRequest;
-            _response.IsSuccess = false;
-            _response.ErrorMessages.Add(_message);
+            _response.FillBadRequestDefault(_message);
             return BadRequest(_response);
         }
-        _response.StatusCode = HttpStatusCode.OK;
-        _response.IsSuccess = true;
+        _response.FillGoodRequestDefault(model);
         return Ok(_response);
     }
 }
