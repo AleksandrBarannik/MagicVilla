@@ -1,7 +1,11 @@
-﻿using MagicVilla_Web.Models;
+﻿using MagicVilla_Utility;
+using MagicVilla_Web.Models;
+using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Models.Dto.Identity;
 using MagicVilla_Web.Services.IServices;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace MagicVilla_Web.Controllers;
 
@@ -17,15 +21,26 @@ public class AuthController:Controller
     [HttpGet]
     public IActionResult Login()
     {
-        LoginRequestDTO obj = new();
+        LoginRequestDTO loginRequest = new();
         return View();
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginRequestDTO obj)
+    public async Task<IActionResult> Login(LoginRequestDTO loginRequest)
     {
-        return View();
+        ApiResponse response = await _authService.LoginAsync<ApiResponse>(loginRequest);
+        if (response != null && response.IsSuccess)
+        {
+            LoginResponseDTO model = JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(response.Result));
+            HttpContext.Session.SetString(SD.SessionToken,model.Token);
+            return RedirectToAction("Index", "Home");
+        }
+        else
+        {
+            ModelState.AddModelError("CustomError",response.ErrorMessages.FirstOrDefault());
+            return View(loginRequest);
+        }
     }
     
     [HttpGet]
@@ -36,9 +51,9 @@ public class AuthController:Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegistrationRequestDTO obj)
+    public async Task<IActionResult> Register(RegistrationRequestDTO registrRequest)
     {
-        ApiResponse response = await _authService.RegisterAsync<ApiResponse>(obj);
+        ApiResponse response = await _authService.RegisterAsync<ApiResponse>(registrRequest);
         if (response != null && response.IsSuccess)
         {
             return RedirectToAction("Login");
@@ -49,7 +64,9 @@ public class AuthController:Controller
     [HttpGet]
     public async Task<IActionResult> Logout()
     {
-        return View();
+        await HttpContext.SignOutAsync();
+        HttpContext.Session.SetString(SD.SessionToken,"");
+        return RedirectToAction("Index", "Home");
     }
     
     [HttpGet]
