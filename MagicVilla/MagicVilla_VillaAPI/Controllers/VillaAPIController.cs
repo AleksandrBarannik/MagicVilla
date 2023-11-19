@@ -48,7 +48,6 @@ public class VillaApiController: ControllerBase
     }
     
     [HttpGet("{id:int}",Name = "GetVilla")]
-    [Authorize(Roles = "admin")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -163,6 +162,7 @@ public class VillaApiController: ControllerBase
         return _response;
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPut("{id:int}", Name = "UpdateVilla")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

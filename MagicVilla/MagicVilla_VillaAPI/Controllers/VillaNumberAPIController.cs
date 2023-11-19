@@ -3,6 +3,7 @@ using AutoMapper;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // Run  HTTP METHODS (GET;POST;PUT;DELETE;PATCH;) for Table VillaNumbers
@@ -79,6 +80,7 @@ public class VillaNumberAPIController: ControllerBase
         return _response;
     }
 
+    [Authorize(Roles = "admin")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -118,6 +120,7 @@ public class VillaNumberAPIController: ControllerBase
         return _response;
     }
 
+    [Authorize(Roles = "admin")]
     [HttpDelete("{id:int}",Name = "DeleteVillaNumber")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -152,6 +155,8 @@ public class VillaNumberAPIController: ControllerBase
         }
         return _response;
     }
+    
+    [Authorize(Roles = "admin")]
     [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status200OK)]
