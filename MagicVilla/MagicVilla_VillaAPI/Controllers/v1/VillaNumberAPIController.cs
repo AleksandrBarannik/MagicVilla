@@ -6,12 +6,13 @@ using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// Run  HTTP METHODS (GET;POST;PUT;DELETE;PATCH;) for Table VillaNumbers
+// Run  HTTP METHODS (GET;POST;PUT;DELETE;PATCH;) for Table VillaNumbers Version 1.0
 
-namespace MagicVilla_VillaAPI.Controllers;
+namespace MagicVilla_VillaAPI.Controllers.v1;
 
-[Route("api/VillaNumberAPI")]
+[Route("api/v{version:apiVersion}/VillaNumberAPI")]
 [ApiController]
+[ApiVersion("1.0")]
 public class VillaNumberAPIController: ControllerBase
 {
     protected ApiResponse _response;
@@ -46,7 +47,7 @@ public class VillaNumberAPIController: ControllerBase
         return _response;
     }
 
-    [HttpGet("{id:int}",Name = "GetVillaNumber")]
+     [HttpGet("{id:int}",Name = "GetVillaNumber")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

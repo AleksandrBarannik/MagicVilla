@@ -9,7 +9,7 @@ public class VillaService:BaseService, IVillaService
 {
     private readonly IHttpClientFactory _clientFactory;
     private string villaUrl;
-    
+
     public VillaService(IHttpClientFactory clientFactory,IConfiguration configuration) : base(clientFactory)
     {
         _clientFactory = clientFactory;
@@ -21,7 +21,7 @@ public class VillaService:BaseService, IVillaService
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
-            Url = villaUrl + "/api/villaAPI",
+            Url = villaUrl + $"/api/{version}/villaAPI",
             Token = token
         });
     }
@@ -31,7 +31,7 @@ public class VillaService:BaseService, IVillaService
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.GET,
-            Url = villaUrl + "/api/VillaAPI/"+id,
+            Url = villaUrl + $"/api/{version}/VillaAPI/"+id,
             Token = token
         });
     }
@@ -42,7 +42,7 @@ public class VillaService:BaseService, IVillaService
         {
             ApiType = SD.ApiType.POST,
             Data = dto,
-            Url = villaUrl + "/api/VillaAPI",
+            Url = villaUrl + $"/api/{version}/VillaAPI",
             Token = token
         });
     }
@@ -53,7 +53,7 @@ public class VillaService:BaseService, IVillaService
         {
             ApiType = SD.ApiType.PUT,
             Data = dto,
-            Url = villaUrl + "/api/VillaAPI/"+ dto.Id,
+            Url = villaUrl + $"/api/{version}/VillaAPI/"+ dto.Id,
             Token = token
         });
     }
@@ -63,7 +63,7 @@ public class VillaService:BaseService, IVillaService
         return SendAsync<T>(new ApiRequest()
         {
             ApiType = SD.ApiType.DELETE,
-            Url = villaUrl + "/api/VillaAPI/"+id,
+            Url = villaUrl + $"/api/{version}/VillaAPI/"+id,
             Token = token
         });
     }

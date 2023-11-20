@@ -9,11 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 // Run  HTTP METHODS (GET;POST;PUT;DELETE;PATCH;) for Table Villas
 
-namespace MagicVilla_VillaAPI.Controllers;
+namespace MagicVilla_VillaAPI.Controllers.v1;
 
 //Set route
-[Route("api/VillaAPI")]
+[Route("api/v{version:apiVersion}/VillaAPI")]
 [ApiController]
+[ApiVersion("1.0")]
 public class VillaApiController: ControllerBase
 {
     protected ApiResponse _response;
@@ -28,7 +29,7 @@ public class VillaApiController: ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [MapToApiVersion("1.0")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async  Task<ActionResult<ApiResponse>> GetVillas()
     {
@@ -46,7 +47,7 @@ public class VillaApiController: ControllerBase
         }
         return _response;
     }
-    
+
     [HttpGet("{id:int}",Name = "GetVilla")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -14,6 +14,8 @@ public class BaseService:IBaseService
     public ApiResponse responseModel { get; set; }
     public IHttpClientFactory httpClient { get; set; }
 
+    protected const string version = "v1";
+
     public BaseService(IHttpClientFactory httpClient)
     {
         this.responseModel = new();
@@ -66,11 +68,11 @@ public class BaseService:IBaseService
 
             try
             {
-                //Для смены флага IsSucsess  и ошибки (что такой номер есть у другой виллы)
+                //For change flag IsSucsess  and Error (VillaNumber Exsist)
                 ApiResponse ApiResponse = JsonConvert.DeserializeObject<ApiResponse>(apiContent);
 
-                if (apiResponse.StatusCode == HttpStatusCode.BadRequest
-                    || apiResponse.StatusCode == HttpStatusCode.NotFound)
+                if (ApiResponse!=null && (apiResponse.StatusCode == HttpStatusCode.BadRequest
+                    || apiResponse.StatusCode == HttpStatusCode.NotFound))
                 {
                     ApiResponse.StatusCode = HttpStatusCode.BadRequest;
                     ApiResponse.IsSuccess = false;
@@ -83,7 +85,7 @@ public class BaseService:IBaseService
             
             catch (Exception e)
             {
-                // если вдруг ApiResponse другого типа ( не созданного нами)
+                // If ApiResponse type is not ApiResponse => exceptionResponse
                 var exceptionResponse = JsonConvert.DeserializeObject<T>(apiContent);
                 return exceptionResponse;
             }
