@@ -7,8 +7,8 @@ Add NuGet:
         Microsoft.EntityFraemworkCore.Tools    
         AutoMapper
         AutoMapper.Extension,Microsoft.DependencyInjection
-            
-        
+        Microsoft.AspNetCore.Mvc.Versioning
+        Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer
 */
 
 using System.Text;
