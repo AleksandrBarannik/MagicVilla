@@ -76,7 +76,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
                 //Service for Controller
-builder.Services.AddControllers().
+builder.Services.AddControllers(option =>
+    {
+        option.CacheProfiles.Add("Default30",
+            new CacheProfile()
+            {
+                Duration = 30
+            });
+    }).
     AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
                 //Service for setting Swagger (Autentification(Token))
 builder.Services.AddSwaggerGen(options =>

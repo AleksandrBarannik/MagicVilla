@@ -29,7 +29,7 @@ public class VillaApiController: ControllerBase
     }
 
     [HttpGet]
-    [MapToApiVersion("1.0")]
+    [ResponseCache(CacheProfileName = "Default30")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async  Task<ActionResult<ApiResponse>> GetVillas()
     {
@@ -49,6 +49,7 @@ public class VillaApiController: ControllerBase
     }
 
     [HttpGet("{id:int}",Name = "GetVilla")]
+    [ResponseCache(Duration = 30)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
