@@ -35,7 +35,7 @@ public class VillaApiController: ControllerBase
     [ResponseCache(CacheProfileName = "Default30")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async  Task<ActionResult<ApiResponse>> GetVillas([FromQuery(Name="filterOcupancy")]int ocupancy,
-                                        [FromQuery] string search,int pageSize = 2, int pageNumber = 1)
+                                        [FromQuery] string search,int pageSize = 0, int pageNumber = 1)
     {
         try
         {
@@ -180,8 +180,6 @@ public class VillaApiController: ControllerBase
             _response.IsSuccess = false;
             _response.ErrorMessages = new List<string>() { ex.ToString() };
         }
-        
-        
         return _response;
     }
 
