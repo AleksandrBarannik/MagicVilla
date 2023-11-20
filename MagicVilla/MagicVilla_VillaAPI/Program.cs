@@ -18,6 +18,7 @@ using MagicVilla_VillaAPI.Repository;
 using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -26,12 +27,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container:
 
+builder.Services.AddEndpointsApiExplorer();
                 //registration service Repository(pattern Repository)
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-//Настройка токена для аунтефикации
+                //Service for AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingConfig));
+                //Service for control Version Api
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1,0);
+});
+                //Service Setting Autentification
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 builder.Services.AddAuthentication(u =>
 {
@@ -50,24 +59,16 @@ builder.Services.AddAuthentication(u =>
             ValidateAudience = false
         };
     });
-
-                //Service for AutoMapper
-builder.Services.AddAutoMapper(typeof(MappingConfig));
-
                 //Service for EntityFraemwork
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     //DefaultSQLConnection write in  appsettings.json
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
-
                 //Service for Controller
 builder.Services.AddControllers().
     AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
-
-
-builder.Services.AddEndpointsApiExplorer();
-
+                //Service for setting Swagger (Autentification(Token))
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
