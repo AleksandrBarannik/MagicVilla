@@ -26,12 +26,15 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container:
-
-builder.Services.AddEndpointsApiExplorer();
-                //registration service Repository(pattern Repository)
+                
+                //registration service Repository(pattern Repository)(our Services)
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddEndpointsApiExplorer();
+                //Service for Caching
+builder.Services.AddResponseCaching();
                 //Service for AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingConfig));
                 //Service for control Version Api
