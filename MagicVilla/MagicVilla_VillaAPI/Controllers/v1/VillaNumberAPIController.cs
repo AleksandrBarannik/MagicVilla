@@ -29,6 +29,7 @@ public class VillaNumberAPIController: ControllerBase
     }
 
     [HttpGet]
+    [ResponseCache(CacheProfileName = "Default30")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async   Task<ActionResult<ApiResponse>> GetVillaNumbers()
     {
@@ -48,6 +49,7 @@ public class VillaNumberAPIController: ControllerBase
     }
 
      [HttpGet("{id:int}",Name = "GetVillaNumber")]
+     [ResponseCache(CacheProfileName = "Default30")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

@@ -6,6 +6,7 @@ using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 // Run  HTTP METHODS (GET;POST;PUT;DELETE;PATCH;) for Table Villas
 
@@ -31,11 +32,25 @@ public class VillaApiController: ControllerBase
     [HttpGet]
     [ResponseCache(CacheProfileName = "Default30")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async  Task<ActionResult<ApiResponse>> GetVillas()
+    public async  Task<ActionResult<ApiResponse>> GetVillas([FromQuery(Name="filterOcupancy")]int ocupancy,
+                                                            [FromQuery] string search)
     {
         try
         {
-            IEnumerable<Villa> villaList = await _dbVilla.GetAllAsync();
+            IEnumerable<Villa> villaList;
+            if (ocupancy > 0)
+            {
+                villaList = await _dbVilla.GetAllAsync(u=> u.Occupancy == ocupancy);
+            }
+            else
+            {
+                villaList = await _dbVilla.GetAllAsync();
+            }
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                villaList = villaList.Where(u => u.Name.ToLower().Contains(search));
+            }
             _response.Result = _mapper.Map<List<VillaDTO>>(villaList);
             _response.StatusCode = HttpStatusCode.OK;
             return Ok(_response);
@@ -45,6 +60,7 @@ public class VillaApiController: ControllerBase
             _response.IsSuccess = false;
             _response.ErrorMessages = new List<string>() { ex.ToString() };
         }
+
         return _response;
     }
 
